@@ -125,7 +125,7 @@ GEMINI_API_KEY="your_actual_gemini_api_key_here"
 MONGODB_URI="mongodb://localhost:27017/emergency_qr"
 
 # OPTION B: If using Cloud MongoDB Atlas:
-# MONGODB_URI="mongodb+srv://myUser:mySecr3tPassword@cluster0.abcde.mongodb.net/emergency_qr?retryWrites=true&w=majority"
+# MONGODB_URI="mongodb+srv://<username>:<password>@cluster0.abcde.mongodb.net/emergency_qr?retryWrites=true&w=majority"
 
 # App Deployment Domain URL
 APP_URL="http://localhost:3000"
