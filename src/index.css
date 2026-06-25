@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+/* Bento Grid Theme Custom Styles */
+.bento-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.bento-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bento-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px -8px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+  border-color: #cbd5e1;
+}
+
+.qr-pattern {
+  background-image: radial-gradient(#0f172a 1.5px, transparent 1.5px);
+  background-size: 8px 8px;
+}
+
+/* Print Specific Utility Overrides to guarantee 1-page compact wallet card printing */
+@media print {
+  html, body {
+    background-color: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide the entire main React application and non-print tags */
+  #root,
+  nav,
+  header,
+  footer,
+  aside,
+  button,
+  form,
+  .no-print {
+    display: none !important;
+  }
+
+  #print-card-layout {
+    display: block !important;
+    visibility: visible !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    background: white !important;
+    margin: 0 !important;
+    padding: 20px !important;
+  }
+}
+

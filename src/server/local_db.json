@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "id": "MED-2026-0001",
+      "name": "Dr. Harish Kumar",
+      "email": "harish@example.com",
+      "password": "hashedpassword123",
+      "age": 35,
+      "bloodGroup": "O+",
+      "allergies": "Penicillin",
+      "conditions": "Asthma",
+      "medications": "Albuterol Inhaler",
+      "emergencyContacts": [
+        {
+          "name": "Priya Kumar",
+          "relationship": "Spouse",
+          "phone": "+919876543210"
+        }
+      ],
+      "qrCodeUrl": "http://localhost:3000/emergency/MED-2026-0001",
+      "role": "user",
+      "createdAt": "2026-06-25T14:55:38.765Z"
+    }
+  ],
+  "scanLogs": []
+}

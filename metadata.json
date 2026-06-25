@@ -1,0 +1,6 @@
+{
+  "name": "QR-Based Emergency Medical ID System",
+  "description": "A secure, instant-access QR medical identity system that allows emergency responders to scan and view critical health data without login, including AI-powered medical risk summaries.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
