@@ -19,7 +19,7 @@ import {
 } from "./src/server/db.js";
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || "emergency-qr-medical-id-secret-key";
 
 // Initialize Gemini API client safely (lazy-loaded when needed)
@@ -189,7 +189,7 @@ app.get("/api/auth/me", authenticateToken, async (req: AuthenticatedRequest, res
 app.post("/api/profile/update", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: "Not authenticated" });
-    
+
     const updates = req.body;
     // Do not allow updating password or email directly through this endpoint
     delete updates.password;
@@ -391,16 +391,34 @@ Keep it very concise, clear, and readable on a small mobile screen. Do not inclu
 `.trim();
 
     const response = await client.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-2.5-flash",
       contents: prompt,
     });
 
     const text = response.text || fallbackSummary;
     res.json({ summary: text, isAiGenerated: true });
-  } catch (error: any) {
-    console.error("Gemini AI generation error:", error);
-    res.status(500).json({ error: "Failed to generate AI summary" });
-  }
+  } 
+  catch (error: any) {
+  console.error("Gemini AI generation error:", error);
+
+  const fallbackSummary = `
+# 🚨 Emergency Medical Summary
+
+Gemini AI is currently unavailable due to high server demand.
+
+## Immediate First Aid
+- Ensure the patient's airway is clear.
+- Check breathing and pulse.
+- Control any bleeding.
+- Contact emergency medical services immediately.
+- Review the patient's medical information shown on this page before administering medication.
+`;
+
+  res.json({
+    summary: fallbackSummary,
+    isAiGenerated: false,
+  });
+}
 });
 
 // Logs: Fetch scan logs for a user
@@ -491,7 +509,7 @@ async function seedAdminUser() {
     const adminEmail = "kaphinraj@gmail.com";
     const existing = await getUserByEmail(adminEmail);
     const hashedPassword = await bcrypt.hash("kaphin2007", 10);
-    
+
     if (!existing) {
       console.log("Seeding bootstrapped root administrator...");
       const userId = "MED-KAPHIN-ADMIN";
