@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Rounded container with rich deep red color -->
+  <rect width="512" height="512" rx="112" fill="#dc2626" />
+  
+  <!-- Subtle circular gradient background for high fidelity -->
+  <circle cx="256" cy="256" r="220" fill="#ffffff" opacity="0.05" />
+  
+  <!-- Medical Shield Outline -->
+  <path d="M 256 80 C 330 80 390 100 390 100 C 390 100 410 260 360 340 C 320 400 256 432 256 432 C 256 432 192 400 152 340 C 102 260 122 100 122 100 C 122 100 182 80 256 80 Z" 
+        fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" opacity="0.2" />
+
+  <!-- Smooth Lifeline Heartbeat Pulse -->
+  <path d="M 80 256 H 180 L 205 130 L 245 382 L 275 190 L 305 310 L 330 256 H 432" 
+        stroke="#ffffff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+
+  <!-- Mini glowing heartbeat dot -->
+  <circle cx="432" cy="256" r="12" fill="#ffffff" />
+</svg>

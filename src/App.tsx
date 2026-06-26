@@ -10,6 +10,7 @@ import QRGenerator from "./components/QRGenerator.js";
 import QRScanner from "./components/QRScanner.js";
 import EmergencyCard from "./components/EmergencyCard.js";
 import AdminDashboard from "./components/AdminDashboard.js";
+import PWAInstallPrompt from "./components/PWAInstallPrompt.js";
 import { User, AuthState } from "./types.js";
 
 export default function App() {
@@ -440,6 +441,9 @@ export default function App() {
           </div>
         </footer>
       )}
+
+      {/* PWA INSTALLATION POPUP */}
+      <PWAInstallPrompt onShowMessage={showNotification} />
 
     </div>
   );
