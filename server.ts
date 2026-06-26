@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import QRCode from "qrcode";
 import { GoogleGenAI } from "@google/genai";
+import mongoose from "mongoose";
 import {
   getUserByEmail,
   createUser,
@@ -464,7 +465,85 @@ app.delete("/api/admin/users/:userId", authenticateToken, requireAdmin, async (r
 // VITE OR STATIC FILES SERVING MIDDLEWARE
 // -----------------------------------------------------------------------------
 
+async function seedAdminUser() {
+  try {
+    // Wait for database connection to settle (connected = 1, disconnected/failed = 0)
+    // readyState: 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+    if (mongoose.connection.readyState === 2) {
+      console.log("Database connection is initializing. Waiting for connection to settle...");
+      await new Promise<void>((resolve) => {
+        const checkInterval = setInterval(() => {
+          if (mongoose.connection.readyState !== 2) {
+            clearInterval(checkInterval);
+            resolve();
+          }
+        }, 100);
+        // Timeout after 3 seconds to avoid blocking indefinitely
+        setTimeout(() => {
+          clearInterval(checkInterval);
+          resolve();
+        }, 3000);
+      });
+    }
+
+    console.log(`Database connection settled with readyState: ${mongoose.connection.readyState}`);
+
+    const adminEmail = "kaphinraj@gmail.com";
+    const existing = await getUserByEmail(adminEmail);
+    const hashedPassword = await bcrypt.hash("kaphin2007", 10);
+    
+    if (!existing) {
+      console.log("Seeding bootstrapped root administrator...");
+      const userId = "MED-KAPHIN-ADMIN";
+      const appUrl = process.env.APP_URL || "http://localhost:3000";
+      const publicUrl = `${appUrl}/emergency/${userId}`;
+      const qrCodeUrl = await QRCode.toDataURL(publicUrl, {
+        color: {
+          dark: "#b91c1c",
+          light: "#ffffff",
+        },
+        width: 400,
+        margin: 1,
+      });
+
+      await createUser({
+        id: userId,
+        email: adminEmail,
+        password: hashedPassword,
+        name: "Kaphin Raj Velu G K",
+        age: 19,
+        bloodGroup: "O+",
+        allergies: "None declared",
+        conditions: "None declared",
+        medications: "None declared",
+        emergencyContacts: [
+          {
+            name: "Family Member",
+            relationship: "Guardian",
+            phone: "+917448444826"
+          }
+        ],
+        qrCodeUrl,
+        role: "admin"
+      });
+      console.log("Root administrator seeded successfully!");
+    } else {
+      console.log("Root administrator already exists. Ensuring password is set to requested credential...");
+      await updateUser(existing.id, {
+        password: hashedPassword,
+        name: existing.name || "Kaphin Raj Velu G K"
+      });
+      console.log("Root administrator credentials synchronized!");
+    }
+  } catch (error) {
+    console.error("Error seeding/synchronizing administrator:", error);
+  }
+}
+
 async function startServer() {
+  // Ensure the admin account is seeded/synced on startup
+  await seedAdminUser();
+
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
