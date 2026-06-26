@@ -265,10 +265,7 @@ export default function ProfileForm({ user, onUpdateSuccess, onShowMessage }: Pr
             </button>
           </div>
 
-          <div className="bg-amber-50 border border-amber-200 p-3.5 rounded-xl text-[11px] text-amber-800 font-semibold leading-relaxed">
-            💡 <strong>Pro-Tip:</strong> Always include the country code prefix (e.g. <code className="bg-amber-100 px-1 rounded text-amber-900 font-mono">+917448444826</code> for India) so that emergency cellular SMS buttons work instantly on all responder devices.
-          </div>
-
+         
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {emergencyContacts.map((contact, index) => (
               <div key={index} className="flex gap-3 items-end md:items-center bg-gray-50/70 p-4 rounded-2xl border border-gray-100">
