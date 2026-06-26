@@ -144,31 +144,31 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
   }
 };
 
-const HOSPITAL_DATABASE: Record<string, { name: string; phone: string; address: string; distance: string }[]> = {
+const HOSPITAL_DATABASE: Record<string, { name: string; phone: string; address: string; distance: string; lat: number; lng: number }[]> = {
   Chennai: [
-    { name: "Rajiv Gandhi Government General Hospital", phone: "+914425305000", address: "Central Station, Chennai", distance: "1.1 km" },
-    { name: "Apollo Emergency Hospital", phone: "+914428290200", address: "Greams Road, Thousand Lights, Chennai", distance: "2.4 km" },
-    { name: "Fortis Malar Hospital", phone: "+914442892222", address: "Gandhi Nagar, Adyar, Chennai", distance: "4.8 km" }
+    { name: "Rajiv Gandhi Government General Hospital", phone: "+914425305000", address: "Central Station, Chennai", distance: "1.1 km", lat: 13.0827, lng: 80.2707 },
+    { name: "Apollo Emergency Hospital", phone: "+914428290200", address: "Greams Road, Thousand Lights, Chennai", distance: "2.4 km", lat: 13.0612, lng: 80.2513 },
+    { name: "Fortis Malar Hospital", phone: "+914442892222", address: "Gandhi Nagar, Adyar, Chennai", distance: "4.8 km", lat: 13.0012, lng: 80.2565 }
   ],
   Mumbai: [
-    { name: "King Edward Memorial Hospital", phone: "+912224107000", address: "Acharya Donde Marg, Parel, Mumbai", distance: "0.8 km" },
-    { name: "Lilavati Hospital & Trauma Centre", phone: "+912226751000", address: "Bandra West, Mumbai", distance: "3.2 km" },
-    { name: "Kokilaben Dhirubhai Ambani Hospital", phone: "+912230999999", address: "Four Bungalows, Andheri West, Mumbai", distance: "5.7 km" }
+    { name: "King Edward Memorial Hospital", phone: "+912224107000", address: "Acharya Donde Marg, Parel, Mumbai", distance: "0.8 km", lat: 19.0025, lng: 72.8420 },
+    { name: "Lilavati Hospital & Trauma Centre", phone: "+912226751000", address: "Bandra West, Mumbai", distance: "3.2 km", lat: 19.0514, lng: 72.8285 },
+    { name: "Kokilaben Dhirubhai Ambani Hospital", phone: "+912230999999", address: "Four Bungalows, Andheri West, Mumbai", distance: "5.7 km", lat: 19.1311, lng: 72.8255 }
   ],
   Delhi: [
-    { name: "AIIMS Trauma & Emergency Department", phone: "+911126588500", address: "Ansari Nagar, New Delhi", distance: "1.2 km" },
-    { name: "Max Super Speciality Hospital", phone: "+911126515050", address: "Press Enclave Road, Saket, New Delhi", distance: "3.5 km" },
-    { name: "Sir Ganga Ram Emergency Care", phone: "+911125735205", address: "Rajinder Nagar, New Delhi", distance: "4.9 km" }
+    { name: "AIIMS Trauma & Emergency Department", phone: "+911126588500", address: "Ansari Nagar, New Delhi", distance: "1.2 km", lat: 28.5672, lng: 77.2100 },
+    { name: "Max Super Speciality Hospital", phone: "+911126515050", address: "Press Enclave Road, Saket, New Delhi", distance: "3.5 km", lat: 28.5276, lng: 77.2102 },
+    { name: "Sir Ganga Ram Emergency Care", phone: "+911125735205", address: "Rajinder Nagar, New Delhi", distance: "4.9 km", lat: 28.6385, lng: 77.1895 }
   ],
   "San Francisco": [
-    { name: "Zuckerberg SF General Hospital & Trauma Center", phone: "+14152068000", address: "1001 Potrero Ave, San Francisco, CA", distance: "1.2 miles" },
-    { name: "UCSF Health Emergency Department", phone: "+14153531037", address: "505 Parnassus Ave, San Francisco, CA", distance: "2.8 miles" },
-    { name: "Kaiser Permanente SF Medical Center", phone: "+14158332000", address: "2425 Geary Blvd, San Francisco, CA", distance: "3.9 miles" }
+    { name: "Zuckerberg SF General Hospital & Trauma Center", phone: "+14152068000", address: "1001 Potrero Ave, San Francisco, CA", distance: "1.2 miles", lat: 37.7556, lng: -122.4047 },
+    { name: "UCSF Health Emergency Department", phone: "+14153531037", address: "505 Parnassus Ave, San Francisco, CA", distance: "2.8 miles", lat: 37.7631, lng: -122.4582 },
+    { name: "Kaiser Permanente SF Medical Center", phone: "+14158332000", address: "2425 Geary Blvd, San Francisco, CA", distance: "3.9 miles", lat: 37.7828, lng: -122.4411 }
   ],
   Bengaluru: [
-    { name: "NIMHANS Emergency & Trauma Block", phone: "+918026995000", address: "Hosur Road, Lakkasandra, Bengaluru", distance: "0.9 km" },
-    { name: "Manipal Hospital Emergency Room", phone: "+918025024444", address: "HAL Old Airport Road, Kodihalli, Bengaluru", distance: "2.6 km" },
-    { name: "St. John's Medical College Hospital", phone: "+918022065000", address: "Sarjapur Road, John Nagar, Bengaluru", distance: "4.1 km" }
+    { name: "NIMHANS Emergency & Trauma Block", phone: "+918026995000", address: "Hosur Road, Lakkasandra, Bengaluru", distance: "0.9 km", lat: 12.9430, lng: 77.5971 },
+    { name: "Manipal Hospital Emergency Room", phone: "+918025024444", address: "HAL Old Airport Road, Kodihalli, Bengaluru", distance: "2.6 km", lat: 12.9592, lng: 77.6444 },
+    { name: "St. John's Medical College Hospital", phone: "+918022065000", address: "Sarjapur Road, John Nagar, Bengaluru", distance: "4.1 km", lat: 12.9333, lng: 77.6244 }
   ]
 };
 
@@ -247,9 +247,7 @@ export default function EmergencyCard({ userId, onShowMessage, onBack }: Emergen
         closestCity = city.name;
       }
     }
-    if (minDistance < 3.0) {
-      setSelectedCity(closestCity);
-    }
+    setSelectedCity(closestCity);
   };
 
   const fetchProfileAndRegisterScan = async () => {
@@ -481,6 +479,28 @@ export default function EmergencyCard({ userId, onShowMessage, onBack }: Emergen
     onShowMessage(`Hospital suggestions updated for "${manualCityInput.trim()}"`, "success");
   };
 
+  const handleRedetectLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          setCoordinates({ lat, lng });
+          detectClosestCity(lat, lng);
+          const locationString = `Coordinates: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+          setLocationCaptured(locationString);
+          onShowMessage(`Location updated! GPS: ${lat.toFixed(4)}, ${lng.toFixed(4)}`, "success");
+        },
+        (err) => {
+          console.warn("GPS lookup failed:", err);
+          onShowMessage("Failed to retrieve GPS location. Please check browser permissions.", "error");
+        }
+      );
+    } else {
+      onShowMessage("Geolocation is not supported by your browser.", "error");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex min-h-[70vh] flex-col items-center justify-center space-y-4" id="emergency-card-loading">
@@ -515,14 +535,63 @@ export default function EmergencyCard({ userId, onShowMessage, onBack }: Emergen
     );
   }
 
-  // Hospital Database list parsing
-  const hospitalList = HOSPITAL_DATABASE[selectedCity] || getFallbackHospitals(selectedCity);
+  // Hospital Database list parsing & fallback generator
   function getFallbackHospitals(city: string) {
+    const baseLat = coordinates ? coordinates.lat : 12.9716;
+    const baseLng = coordinates ? coordinates.lng : 77.5946;
     return [
-      { name: `${city} Emergency Trauma Clinic`, phone: "+15550199", address: "Emergency Medical Wing, " + city, distance: "1.4 km" },
-      { name: `${city} General Municipal Hospital`, phone: "+15550188", address: "Downtown Civic Center, " + city, distance: "3.2 km" },
-      { name: "Global Allied Red Cross Hospital", phone: "+15550177", address: "Expressway Ring Road, " + city, distance: "4.7 km" }
+      { name: `${city} Emergency Trauma Clinic`, phone: "+15550199", address: "Emergency Medical Wing, " + city, distance: "1.4 km", lat: baseLat + 0.012, lng: baseLng + 0.015 },
+      { name: `${city} General Municipal Hospital`, phone: "+15550188", address: "Downtown Civic Center, " + city, distance: "3.2 km", lat: baseLat - 0.015, lng: baseLng - 0.011 },
+      { name: "Global Allied Red Cross Hospital", phone: "+15550177", address: "Expressway Ring Road, " + city, distance: "4.7 km", lat: baseLat + 0.021, lng: baseLng - 0.024 }
     ];
+  }
+
+  // Dynamic distance calculation using Haversine formula
+  const getDynamicDistance = (h: { lat: number; lng: number; distance: string }) => {
+    if (!coordinates) return h.distance;
+    
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = (h.lat - coordinates.lat) * Math.PI / 180;
+    const dLon = (h.lng - coordinates.lng) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(coordinates.lat * Math.PI / 180) * Math.cos(h.lat * Math.PI / 180) * 
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distanceKm = R * c;
+    
+    // Check if the current city uses miles (San Francisco)
+    if (selectedCity === "San Francisco") {
+      const distanceMiles = distanceKm * 0.621371;
+      return `${distanceMiles.toFixed(1)} miles`;
+    }
+    return `${distanceKm.toFixed(1)} km`;
+  };
+
+  const getRawDistance = (h: { lat: number; lng: number }) => {
+    if (!coordinates) return 0;
+    const dLat = (h.lat - coordinates.lat) * Math.PI / 180;
+    const dLon = (h.lng - coordinates.lng) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(coordinates.lat * Math.PI / 180) * Math.cos(h.lat * Math.PI / 180) * 
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return 6371 * c;
+  };
+
+  // Process and sort hospital database items or fallbacks
+  const baseHospitalList = HOSPITAL_DATABASE[selectedCity] || getFallbackHospitals(selectedCity);
+  
+  const hospitalList = [...baseHospitalList].map(h => ({
+    ...h,
+    distance: getDynamicDistance(h),
+    rawDistance: getRawDistance(h)
+  }));
+
+  // Sort by physical proximity when current coordinates are available
+  if (coordinates) {
+    hospitalList.sort((a, b) => a.rawDistance - b.rawDistance);
   }
 
   // Construct map coordinates or general text query
@@ -610,84 +679,7 @@ export default function EmergencyCard({ userId, onShowMessage, onBack }: Emergen
         </div>
       </div>
 
-      {/* EMERGENCY HELP ACTIONS */}
-      <div className="grid grid-cols-1 gap-4">
-        
-        {/* SOS EMERGENCY ALERT TO FAMILY */}
-        <div className="bento-card border-red-100 bg-white p-5 flex flex-col justify-between space-y-4">
-          <div className="space-y-1.5">
-            <h4 className="text-xs font-black text-gray-400 uppercase tracking-widest flex items-center gap-1">
-              <Bell className="h-4 w-4 text-red-500" />
-              Emergency Broadcast
-            </h4>
-            <p className="text-xs text-gray-500 font-medium leading-relaxed">
-              Dispatches instant alerts with real-time GPS tracking coordinates to all listed emergency contacts immediately.
-            </p>
-          </div>
-
-          {sosState === "idle" && (
-            <button
-              onClick={handleSendSOSAlerts}
-              className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white px-4 py-3 text-xs font-black shadow-md hover:from-red-700 hover:to-rose-700 active:scale-95 transition-transform"
-            >
-              <Bell className="h-4 w-4 animate-bounce" />
-              {t.sendAlert}
-            </button>
-          )}
-
-          {sosState === "sending" && (
-            <div className="bg-red-50 border border-red-100 rounded-2xl p-3.5 space-y-2">
-              <div className="flex items-center gap-2 text-xs text-red-800 font-black uppercase">
-                <span className="h-3 w-3 animate-ping rounded-full bg-red-600 shrink-0" />
-                {t.alertSending}
-              </div>
-              
-              {/* Stepper dispatch trace */}
-              <div className="space-y-1 text-[10px] font-bold text-gray-500">
-                <p className={sosStepIndex >= 0 ? "text-red-700" : "opacity-40"}>
-                  {sosStepIndex >= 0 ? "✓" : "○"} 🛰️ Acquiring GPS telemetry payload...
-                </p>
-                <p className={sosStepIndex >= 1 ? "text-red-700" : "opacity-40"}>
-                  {sosStepIndex >= 1 ? "✓" : "○"} 🌐 Resolving SMS Emergency Gateway...
-                </p>
-                <p className={sosStepIndex >= 2 ? "text-red-700" : "opacity-40"}>
-                  {sosStepIndex >= 2 ? "✓" : "○"} 📲 Broadcasting cellular alerts to contacts...
-                </p>
-                <p className={sosStepIndex >= 3 ? "text-red-700" : "opacity-40"}>
-                  {sosStepIndex >= 3 ? "✓" : "○"} 🖧 Emergency tracking payload online.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {sosState === "sent" && (
-            <div className="bg-green-50 border border-green-100 rounded-2xl p-4 text-center space-y-2">
-              <span className="inline-flex rounded-full bg-green-100 p-1.5 text-green-600">
-                <ShieldCheck className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="text-xs font-black text-green-950 uppercase tracking-wider">{t.alertSent}</p>
-                <p className="text-[11px] text-green-700 font-bold mt-1">
-                  Dispatched GPS Emergency alerts with location coordinates {locationCaptured} to:
-                </p>
-                <div className="mt-2 flex flex-wrap gap-1.5 justify-center">
-                  {profile.emergencyContacts && profile.emergencyContacts.length > 0 ? (
-                    profile.emergencyContacts.map((contact, idx) => (
-                      <div key={idx} className="text-[10px] bg-green-100/50 text-green-900 px-2 py-1 rounded-lg font-extrabold border border-green-200/50">
-                        {contact.name} ({contact.phone})
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-[10px] text-green-600 italic">Global Emergency Responders Network</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-      </div>
-
+  
       {/* CORE VITALS BANNER IN BENTO GRID */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         
@@ -767,60 +759,6 @@ export default function EmergencyCard({ userId, onShowMessage, onBack }: Emergen
         )}
       </div>
 
-      {/* VOICE ASSISTANT */}
-      <div className="bento-card bg-slate-50 border border-slate-150 p-4 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-red-600 shrink-0">
-            <Volume2 className={`h-5 w-5 ${speechState === "playing" ? "animate-bounce" : ""}`} />
-          </div>
-          <div className="text-left">
-            <p className="text-[10px] uppercase font-black tracking-wider text-gray-400">{t.voiceAssist}</p>
-            <p className="text-xs text-gray-600 font-bold leading-normal">
-              {speechState === "playing" ? "Currently reading medical overview..." : "Read emergency summary aloud for quick audio triage."}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 shrink-0 w-full md:w-auto justify-end">
-          {speechState === "stopped" ? (
-            <button
-              onClick={handleSpeak}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-4 transition-all shadow-sm active:scale-95"
-            >
-              <Play className="h-3.5 w-3.5 fill-current" />
-              {t.playVoice}
-            </button>
-          ) : (
-            <>
-              {speechState === "playing" && (
-                <button
-                  onClick={handleSpeak}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2.5 px-4 transition-all shadow-sm active:scale-95"
-                >
-                  <Pause className="h-3.5 w-3.5 fill-current" />
-                  {t.pauseVoice}
-                </button>
-              )}
-              {speechState === "paused" && (
-                <button
-                  onClick={handleSpeak}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-2.5 px-4 transition-all shadow-sm active:scale-95"
-                >
-                  <Play className="h-3.5 w-3.5 fill-current" />
-                  {t.resumeVoice}
-                </button>
-              )}
-              <button
-                onClick={handleStopSpeech}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2.5 px-4 transition-all shadow-sm active:scale-95"
-              >
-                <Square className="h-3.5 w-3.5 fill-current" />
-                {t.stopVoice}
-              </button>
-            </>
-          )}
-        </div>
-      </div>
 
       {/* EMERGENCY CONTACTS */}
       <div className="bento-card space-y-4">
@@ -912,26 +850,37 @@ export default function EmergencyCard({ userId, onShowMessage, onBack }: Emergen
         </div>
 
         {/* MANUAL CITY CHANGER (IN CASE GPS ACCESS IS DENIED AUTOMATICALLY) */}
-        <form onSubmit={handleManualCitySearch} className="flex gap-2">
-          <div className="relative flex-1">
-            <Compass className="absolute left-3 top-3 h-4.5 w-4.5 text-gray-400" />
-            <input
-              type="text"
-              value={manualCityInput}
-              onChange={(e) => setManualCityInput(e.target.value)}
-              placeholder={t.selectCity}
-              className="w-full rounded-xl border border-gray-300 pl-10 pr-4 py-2.5 text-xs font-semibold focus:border-red-500 focus:outline-none bg-white"
-              id="hospital-city-input"
-            />
-          </div>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <form onSubmit={handleManualCitySearch} className="flex flex-1 gap-2">
+            <div className="relative flex-1">
+              <Compass className="absolute left-3 top-3 h-4.5 w-4.5 text-gray-400" />
+              <input
+                type="text"
+                value={manualCityInput}
+                onChange={(e) => setManualCityInput(e.target.value)}
+                placeholder={t.selectCity}
+                className="w-full rounded-xl border border-gray-300 pl-10 pr-4 py-2.5 text-xs font-semibold focus:border-red-500 focus:outline-none bg-white"
+                id="hospital-city-input"
+              />
+            </div>
+            <button
+              type="submit"
+              className="rounded-xl bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 text-xs font-bold shadow-md shrink-0 flex items-center gap-1.5 animate-none"
+            >
+              <Search className="h-3.5 w-3.5" />
+              Search
+            </button>
+          </form>
           <button
-            type="submit"
-            className="rounded-xl bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 text-xs font-bold shadow-md shrink-0 flex items-center gap-1.5"
+            type="button"
+            onClick={handleRedetectLocation}
+            className="rounded-xl bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 text-xs font-bold shadow-md shrink-0 flex items-center gap-1.5 transition-all active:scale-95"
+            title="Automatically detect current GPS location"
           >
-            <Search className="h-3.5 w-3.5" />
-            Search
+            <MapPin className="h-4 w-4 text-white" />
+            Use Live GPS
           </button>
-        </form>
+        </div>
 
         {/* Popular Cities Quick Pill Selectors */}
         <div className="flex flex-wrap gap-1.5">
